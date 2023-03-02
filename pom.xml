@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.itmk</groupId>
-    <artifactId>itmk-base-parent</artifactId>
+    <groupId>com.switchsky</groupId>
+    <artifactId>dormitory-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>itmk-base-common</module>
-        <module>itmk-base-web</module>
+        <module>dormitory-common</module>
+        <module>dormitory-web</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -64,6 +64,7 @@
                 <artifactId>kaptcha</artifactId>
                 <version>${kaptcha.version}</version>
                 <systemPath>${project.basedir}/lib/kaptcha-2.3.2.jar</systemPath>
+                <scope>system</scope>
             </dependency>
 
             <!-- JSON转换工具类依赖 -->

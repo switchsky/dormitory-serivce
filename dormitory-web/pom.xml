@@ -3,18 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>itmk-base-parent</artifactId>
-        <groupId>com.itmk</groupId>
+        <artifactId>dormitory-parent</artifactId>
+        <groupId>com.switchsky</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>itmk-base-web</artifactId>
+    <artifactId>dormitory-web</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.itmk</groupId>
-            <artifactId>itmk-base-common</artifactId>
+            <groupId>com.switchsky</groupId>
+            <artifactId>dormitory-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!--web启动器,对springmvc,serlvet等支持-->
