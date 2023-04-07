@@ -63,7 +63,7 @@
                 <groupId>com.github.penggle</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>${kaptcha.version}</version>
-                <systemPath>${project.basedir}/lib/kaptcha-2.3.2.jar</systemPath>
+                <systemPath>D:/kaptcha-2.3.2.jar</systemPath>
                 <scope>system</scope>
             </dependency>
 

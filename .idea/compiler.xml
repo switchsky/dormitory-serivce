@@ -7,8 +7,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="dormitory-web" />
         <module name="dormitory-common" />
+        <module name="dormitory-web" />
       </profile>
     </annotationProcessing>
   </component>
