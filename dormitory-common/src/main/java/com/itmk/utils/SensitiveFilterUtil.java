@@ -119,7 +119,6 @@ public class SensitiveFilterUtil {
      *
      * @param txt
      * @param beginIndex
-     * @param matchType
      * @return 如果存在,则返回敏感词字符的长度,不存在返回0
      */
     private static int checkSensitiveWord(String txt, int beginIndex) {
