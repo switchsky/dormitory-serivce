@@ -8,7 +8,7 @@ import com.itmk.web.select_bed.entity.StuBedVo;
 import java.util.List;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface StuBedService extends IService<StuBed> {

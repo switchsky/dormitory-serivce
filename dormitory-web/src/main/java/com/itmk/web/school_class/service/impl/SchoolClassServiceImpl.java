@@ -12,7 +12,7 @@ import com.itmk.web.school_class.service.SchoolClassService;
 import org.springframework.stereotype.Service;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 @Service

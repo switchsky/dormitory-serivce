@@ -8,7 +8,7 @@ import com.itmk.web.school_student.entity.StuParm;
 
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SchoolStudentService extends IService<SchoolStudent> {

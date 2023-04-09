@@ -6,7 +6,7 @@ import com.itmk.web.apply_change.entity.StuInfoVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface ApplyChangeMapper extends BaseMapper<ApplyChange> {

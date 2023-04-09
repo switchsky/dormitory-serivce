@@ -8,7 +8,7 @@ import com.itmk.web.school_class.entity.ListParm;
 import com.itmk.web.school_class.entity.SchoolClass;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SchoolClassService extends IService<SchoolClass> {

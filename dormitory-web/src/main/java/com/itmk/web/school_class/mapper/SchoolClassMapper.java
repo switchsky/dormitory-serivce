@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SchoolClassMapper extends BaseMapper<SchoolClass> {

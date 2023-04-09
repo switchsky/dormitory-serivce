@@ -6,7 +6,7 @@ import com.itmk.web.sys_role_menu.entity.SysRoleMenu;
 import java.util.List;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SysRoleMenuService extends IService<SysRoleMenu> {

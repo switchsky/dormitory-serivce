@@ -3,7 +3,7 @@ package com.itmk.web.school_collage.entity;
 import lombok.Data;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 @Data

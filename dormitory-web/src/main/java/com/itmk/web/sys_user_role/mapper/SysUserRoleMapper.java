@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.itmk.web.sys_user_role.entity.SysUserRole;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {

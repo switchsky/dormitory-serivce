@@ -7,7 +7,7 @@ import com.itmk.web.school_major.entity.SchoolMajor;
 
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SchoolMajorService extends IService<SchoolMajor> {

@@ -7,7 +7,7 @@ import com.itmk.web.sys_notice.service.SysNoticeService;
 import org.springframework.stereotype.Service;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 @Service

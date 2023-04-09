@@ -7,7 +7,7 @@ import com.itmk.web.school_student.entity.StuParm;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SchoolStudentMapper extends BaseMapper<SchoolStudent> {

@@ -7,7 +7,7 @@ import com.itmk.web.school_major.entity.SchoolMajor;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface SchoolMajorMapper extends BaseMapper<SchoolMajor> {

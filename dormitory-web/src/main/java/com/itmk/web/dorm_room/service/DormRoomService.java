@@ -7,7 +7,7 @@ import com.itmk.web.dorm_room.entity.RoomTree;
 import java.util.List;
 
 /**
- * @Author java实战基地
+ * @Author thf
  * @Version 3501754007
  */
 public interface DormRoomService extends IService<DormRoom> {
