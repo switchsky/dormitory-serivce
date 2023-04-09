@@ -1,8 +1,8 @@
 package com.itmk.web.sys_login.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itmk.config.jwt.JwtUtils;
+import com.itmk.utils.CodeUtil;
 import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
 import com.itmk.web.school_student.entity.SchoolStudent;
@@ -21,6 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,12 +47,27 @@ public class LoginController {
     @Autowired
     private SysMenuService sysMenuService;
 
-    //登录
+    //验证码获取
+
+    @GetMapping("/verifyCode")
+    public ResultVo verifyCode(HttpServletRequest request, HttpServletResponse resp) throws IOException {
+        Map<String,Object> map = CodeUtil.generateCodeAndPic();
+        BufferedImage image = (BufferedImage) map.get("codePic");
+        //转base64便于传输
+        String image2 = CodeUtil.BufferedImageToBase64(image);
+        String code = String.valueOf(map.get("code"));
+        HttpSession session = request.getSession(true);
+        session.setAttribute("verify_code", code);
+        return ResultUtils.success("ok",image2);
+    }
     @PostMapping("/login")
     public ResultVo login(@RequestBody LoginParm parm) {
         if (StringUtils.isEmpty(parm.getUsername()) || StringUtils.isEmpty(parm.getPassword()) || StringUtils.isEmpty(parm.getUserType())) {
             return ResultUtils.error("用户名或密码不能为空!");
         }
+        //获取验证码
+        int code = parm.getCode();
+
         //获取密码
         String password = DigestUtils.md5DigestAsHex(parm.getPassword().getBytes());
         if (parm.getUserType().equals("1")) {
@@ -115,13 +135,13 @@ public class LoginController {
             //获取code字段
             List<String> collect = menuList.stream().filter(item -> item != null && item.getCode() != null && StringUtils.isNotEmpty(item.getCode()))
                     .map(item -> item.getCode()).collect(Collectors.toList());
-            if(collect.size() ==0){
+            if (collect.size() == 0) {
                 return ResultUtils.error("为分配权限，请联系管理员!");
             }
             String[] array = collect.toArray(new String[collect.size()]);
             //设置用户的权限字段
             userInfo.setRoles(array);
-            return ResultUtils.success("查询成功",userInfo);
+            return ResultUtils.success("查询成功", userInfo);
         } else {
             //查询用户信息
             SchoolStudent user = schoolStudentService.getById(userId);
@@ -134,33 +154,33 @@ public class LoginController {
             //获取code字段
             List<String> collect = menuList.stream().filter(item -> item != null && item.getCode() != null && StringUtils.isNotEmpty(item.getCode()))
                     .map(item -> item.getCode()).collect(Collectors.toList());
-            if(collect.size() ==0){
+            if (collect.size() == 0) {
                 return ResultUtils.error("为分配权限，请联系管理员!");
             }
             String[] array = collect.toArray(new String[collect.size()]);
             //设置用户的权限字段
             userInfo.setRoles(array);
-            return ResultUtils.success("查询成功",userInfo);
+            return ResultUtils.success("查询成功", userInfo);
         }
     }
 
     //查询菜单
     @GetMapping("/getMenuList")
-    public ResultVo getMenuList(Long userId,String userType){
+    public ResultVo getMenuList(Long userId, String userType) {
         //根据用户id查询菜单
         List<SysMenu> menuList = null;
-        if(userType.equals("1")){
+        if (userType.equals("1")) {
             //查询用户信息
             SysUser user = sysUserService.getById(userId);
-            if(user.getIsAdmin().equals("1")){
+            if (user.getIsAdmin().equals("1")) {
                 menuList = sysMenuService.list();
-            }else{
+            } else {
                 menuList = sysMenuService.getMenuByUserId(userId);
             }
-        }else{
+        } else {
             menuList = sysMenuService.getStuMenuByUserId(userId);
         }
-        if(menuList == null || menuList.size() == 0){
+        if (menuList == null || menuList.size() == 0) {
             return ResultUtils.error("暂未分配权限，请联系管理员!");
         }
         //帅选出菜单,类型是 目录和菜单
@@ -168,6 +188,6 @@ public class LoginController {
                 .collect(Collectors.toList());
         //组装路由数据
         List<RouterVO> router = MakeTree.makeRouter(collect, 0L);
-        return ResultUtils.success("查询成功",router);
+        return ResultUtils.success("查询成功", router);
     }
 }
