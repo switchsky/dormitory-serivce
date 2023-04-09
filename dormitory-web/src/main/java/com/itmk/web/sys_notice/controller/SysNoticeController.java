@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
+import com.itmk.utils.SensitiveFilterUtil;
 import com.itmk.web.sys_notice.entity.NoticeParm;
 import com.itmk.web.sys_notice.entity.SysNotice;
 import com.itmk.web.sys_notice.service.SysNoticeService;
@@ -28,6 +29,13 @@ public class SysNoticeController {
     @PostMapping
     public ResultVo add(@RequestBody SysNotice sysNotice){
         sysNotice.setCreateTime(new Date());
+        //过滤敏感词
+        String noticeTitle = sysNotice.getNoticeTitle();
+        String noticeText = sysNotice.getNoticeText();
+        //初始化容器
+        SensitiveFilterUtil.initContext();
+        Boolean haveSensitiveWords = SensitiveFilterUtil.contains(noticeTitle)||SensitiveFilterUtil.contains(noticeText);
+        if(haveSensitiveWords) return ResultUtils.error("含有敏感词汇，请重新编辑");
         boolean save = sysNoticeService.save(sysNotice);
         if(save){
             return ResultUtils.success("新增成功");
@@ -37,6 +45,12 @@ public class SysNoticeController {
     //编辑
     @PutMapping
     public ResultVo edit(@RequestBody SysNotice sysNotice){
+        String noticeTitle = sysNotice.getNoticeTitle();
+        String noticeText = sysNotice.getNoticeText();
+        //初始化容器
+        SensitiveFilterUtil.initContext();
+        Boolean haveSensitiveWords = SensitiveFilterUtil.contains(noticeTitle)||SensitiveFilterUtil.contains(noticeText);
+        if(haveSensitiveWords) return ResultUtils.error("含有敏感词汇，请重新编辑");
         boolean save = sysNoticeService.updateById(sysNotice);
         if(save){
             return ResultUtils.success("编辑成功");
