@@ -1,12 +1,15 @@
 package com.itmk.web.sys_login.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.itmk.config.jwt.JwtUtils;
+import com.itmk.config.redis.RedisUtil;
 import com.itmk.utils.CodeUtil;
 import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
 import com.itmk.web.school_student.entity.SchoolStudent;
 import com.itmk.web.school_student.service.SchoolStudentService;
+import com.itmk.web.sys_login.entity.CaptchaResult;
 import com.itmk.web.sys_login.entity.LoginParm;
 import com.itmk.web.sys_login.entity.LoginResult;
 import com.itmk.web.sys_login.entity.UserInfo;
@@ -20,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +33,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +51,8 @@ public class LoginController {
     private SchoolStudentService schoolStudentService;
     @Autowired
     private SysMenuService sysMenuService;
-
+    @Autowired
+    private RedisUtil redisUtil;
     //验证码获取
 
     @GetMapping("/verifyCode")
@@ -56,17 +62,32 @@ public class LoginController {
         //转base64便于传输
         String image2 = CodeUtil.BufferedImageToBase64(image);
         String code = String.valueOf(map.get("code"));
-        HttpSession session = request.getSession(true);
-        session.setAttribute("verify_code", code);
-        return ResultUtils.success("ok",image2);
+        String ip = request.getRemoteAddr();
+        //实际开发中token为主键id+随机的uuid
+        String token= UUID.randomUUID().toString().replaceAll("-", "");
+        Jedis jedis = redisUtil.getJedis();
+        //将验证码放入缓存中
+        jedis.set(token,code);
+        //设置验证码超时时间
+        jedis.expire(token, 300);
+        CaptchaResult captchaResult = new CaptchaResult();
+        captchaResult.setImg(image2);
+        captchaResult.setToken(token);
+        return ResultUtils.success("ok",captchaResult);
     }
     @PostMapping("/login")
     public ResultVo login(@RequestBody LoginParm parm) {
+        if (StringUtils.isEmpty(parm.getCaptcha())||StringUtils.isEmpty(parm.getToken())) {
+            return ResultUtils.error("验证码不能为空");
+        }
+        Jedis jedis = redisUtil.getJedis();
+        if (jedis.get(parm.getToken())==null) return ResultUtils.error("验证码超时,请刷新");
+        String captcha = jedis.get(parm.getToken());
+        //先判断验证码是否正确
+        if(!captcha.equalsIgnoreCase(parm.getCaptcha().trim())) return ResultUtils.error("验证码错误");
         if (StringUtils.isEmpty(parm.getUsername()) || StringUtils.isEmpty(parm.getPassword()) || StringUtils.isEmpty(parm.getUserType())) {
             return ResultUtils.error("用户名或密码不能为空!");
         }
-        //获取验证码
-        int code = parm.getCode();
 
         //获取密码
         String password = DigestUtils.md5DigestAsHex(parm.getPassword().getBytes());
