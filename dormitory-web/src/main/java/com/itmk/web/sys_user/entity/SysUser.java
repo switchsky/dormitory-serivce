@@ -35,4 +35,12 @@ public class SysUser {
     private Date createTime;
     //更新时间
     private Date updateTime;
+    //爱好
+    private String hobby;
+    //年龄
+    private int age;
+    //图片存放路径
+    private String img;
+    //个性签名
+    private String signature;
 }
