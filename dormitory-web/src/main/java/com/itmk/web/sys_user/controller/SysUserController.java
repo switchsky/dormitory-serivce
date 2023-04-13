@@ -1,20 +1,23 @@
 package com.itmk.web.sys_user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.itmk.utils.ReadTxt;
 import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
 import com.itmk.web.sys_role.entity.SysRole;
 import com.itmk.web.sys_role.service.SysRoleService;
-import com.itmk.web.sys_user.entity.PageParm;
-import com.itmk.web.sys_user.entity.SysUser;
+import com.itmk.web.sys_user.entity.*;
 import com.itmk.web.sys_user.service.SysUserService;
 import com.itmk.web.sys_user_role.entity.SysUserRole;
 import com.itmk.web.sys_user_role.service.SysUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -97,5 +100,60 @@ public class SysUserController {
         query.lambda().eq(SysUserRole::getUserId,userId);
         SysUserRole one = sysUserRoleService.getOne(query);
         return ResultUtils.success("查询成功",one);
+    }
+
+    @GetMapping("/getUserInfo")
+    public ResultVo getUserInfo(UserInfoParam param){
+        if (param.getUserType()==null||param.getUserId()==null) {
+            return ResultUtils.error("查询个人信息失败");
+        }
+        QueryWrapper<SysUser> query = new QueryWrapper<>();
+        query.lambda().eq(SysUser::getUserId, param.getUserId());
+        SysUser one = sysUserService.getOne(query);
+        if(one == null) return ResultUtils.error("用户不存在");
+        String img = "";
+        if(one.getImg()!=null) {
+            img = ReadTxt.readFile(one.getImg());
+        }
+        UserInfoV0 userInfoV0 = new UserInfoV0();
+        userInfoV0.setAge(one.getAge());
+        userInfoV0.setImg(img);
+        userInfoV0.setPhone(one.getPhone());
+        userInfoV0.setHobby(one.getHobby());
+        userInfoV0.setEmail(one.getEmail());
+        userInfoV0.setSex(one.getSex());
+        userInfoV0.setSignature(one.getSignature());
+        userInfoV0.setNickName(one.getNickName());
+        userInfoV0.setUsername(one.getUsername());
+        return ResultUtils.success("ok",userInfoV0);
+    }
+    @PutMapping("/updatePerson")
+    public ResultVo updateUserInfo(@RequestBody UserEditInfoParam param) throws IOException {
+        if (param.getUserType()==null||param.getUserId()==null) {
+            return ResultUtils.error("查询个人信息失败");
+        }
+        QueryWrapper<SysUser> query = new QueryWrapper<>();
+        query.lambda().eq(SysUser::getUserId, param.getUserId());
+        SysUser user = sysUserService.getOne(query);
+        user.setAge(param.getAge());
+        user.setUserId(Long.valueOf(param.getUserId()));
+        user.setEmail(param.getEmail());
+        user.setHobby(param.getHobby());
+        //图片处理
+        String img = param.getImg();
+        if (img == null||img.trim().equals(""))
+            user.setImg(img);
+        else {
+            String url = "D:/img/"+param.getUserId()+".txt";
+            user.setImg(ReadTxt.writeFile(url,img));
+        }
+        user.setNickName(param.getNickName());
+        user.setPhone(param.getPhone());
+        user.setSignature(param.getSignature());
+        user.setSex(param.getSex());
+        user.setUpdateTime(new Date());
+        //更新处理
+        sysUserService.edit(user);
+        return ResultUtils.success("更新成功");
     }
 }

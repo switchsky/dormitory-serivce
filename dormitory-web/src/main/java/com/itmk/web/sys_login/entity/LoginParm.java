@@ -11,6 +11,7 @@ public class LoginParm {
     private String username;
     private String password;
     private String userType;
+    //验证码
     private String token;
     private String captcha;
 }
