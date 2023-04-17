@@ -156,4 +156,21 @@ public class SysUserController {
         sysUserService.edit(user);
         return ResultUtils.success("更新成功");
     }
+
+    @PutMapping("/changePassword")
+    public ResultVo changePassword(@RequestBody ChangePasswordParam param) throws IOException {
+        if (param.getUserId()==null) {
+            return ResultUtils.error("查询个人信息失败");
+        }
+        QueryWrapper<SysUser> query = new QueryWrapper<>();
+        query.lambda().eq(SysUser::getUserId, param.getUserId());
+        SysUser user = sysUserService.getOne(query);
+        String password = DigestUtils.md5DigestAsHex(param.getOldpassword().getBytes());
+        if(!password.equals(user.getPassword())) return ResultUtils.error("原密码错误");
+        String newPassword = DigestUtils.md5DigestAsHex(param.getNewpassword().getBytes());
+        user.setPassword(newPassword);
+        //更新处理
+        sysUserService.edit(user);
+        return ResultUtils.success("更新成功");
+    }
 }

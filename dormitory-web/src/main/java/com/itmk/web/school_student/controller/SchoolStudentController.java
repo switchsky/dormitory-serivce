@@ -11,11 +11,16 @@ import com.itmk.web.school_student.entity.StuParm;
 import com.itmk.web.school_student.service.SchoolStudentService;
 import com.itmk.web.sys_role.entity.SysRole;
 import com.itmk.web.sys_role.service.SysRoleService;
+import com.itmk.web.sys_user.entity.ChangePasswordParam;
+import com.itmk.web.sys_user.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+
+import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 
 /**
  * @Author thf
@@ -99,5 +104,21 @@ public class SchoolStudentController {
         query.lambda().eq(SchoolStudent::getClassId,classId);
         List<SchoolStudent> list = schoolStudentService.list(query.select("stu_id","stu_name"));
         return ResultUtils.success("查询成功",list);
+    }
+    //学生修改密码
+    @PutMapping("/changeStuPassword")
+    public ResultVo changePassword(@RequestBody ChangePasswordParam param) throws IOException {
+        if (param.getUserId()==null) {
+            return ResultUtils.error("查询个人信息失败");
+        }
+        SchoolStudent student = schoolStudentService.getById(param.getUserId());
+        String password = DigestUtils.md5DigestAsHex(param.getOldpassword().getBytes());
+        if(!password.equals(student.getPassword())) return ResultUtils.error("原密码错误");
+        String newPassword = DigestUtils.md5DigestAsHex(param.getNewpassword().getBytes());
+        student.setPassword(newPassword);
+        student.setRoleId(4L);
+        //更新处理
+        schoolStudentService.editStu(student);
+        return ResultUtils.success("密码修改成功");
     }
 }
