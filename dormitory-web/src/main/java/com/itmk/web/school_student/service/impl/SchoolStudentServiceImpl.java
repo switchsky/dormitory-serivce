@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmk.web.school_student.entity.SchoolStudent;
+import com.itmk.web.school_student.entity.StuNumByClassDto;
 import com.itmk.web.school_student.entity.StuParm;
 import com.itmk.web.school_student.mapper.SchoolStudentMapper;
 import com.itmk.web.school_student.service.SchoolStudentService;
@@ -13,6 +14,8 @@ import com.itmk.web.stu_role.service.StuRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author thf
@@ -80,5 +83,15 @@ public class SchoolStudentServiceImpl extends ServiceImpl<SchoolStudentMapper, S
     @Override
     public SchoolStudent getById(Long studId) {
         return this.baseMapper.getStuById(studId);
+    }
+
+    @Override
+    public List<Integer> getTotal() {
+        return this.baseMapper.getTotal();
+    }
+
+    @Override
+    public List<StuNumByClassDto> getClassStuNum() {
+        return this.baseMapper.getClassStuNum();
     }
 }

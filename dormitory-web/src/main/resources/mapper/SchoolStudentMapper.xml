@@ -36,4 +36,14 @@
         left join stu_role as sr on sr.stu_id = st.stu_id
         where st.stu_id =#{stuId}
     </select>
+
+       <!--男女总数统计  -->
+	<select id="getTotal" resultType="Integer">
+		select count(*) as num from school_student group by sex
+	</select>
+
+    <!--查询班级学生人数，左连接  -->
+	<select id="getClassStuNum" resultType="com.itmk.web.school_student.entity.StuNumByClassDto">
+		select class_name as className,count(*) as num from school_student as stu left join school_class as class on stu.class_id=class.class_id group by class.class_name
+	</select>
 </mapper>

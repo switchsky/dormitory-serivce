@@ -6,8 +6,7 @@ import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
 import com.itmk.web.school_class.entity.SchoolClass;
 import com.itmk.web.school_class.service.SchoolClassService;
-import com.itmk.web.school_student.entity.SchoolStudent;
-import com.itmk.web.school_student.entity.StuParm;
+import com.itmk.web.school_student.entity.*;
 import com.itmk.web.school_student.service.SchoolStudentService;
 import com.itmk.web.sys_role.entity.SysRole;
 import com.itmk.web.sys_role.service.SysRoleService;
@@ -18,6 +17,8 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
@@ -120,5 +121,28 @@ public class SchoolStudentController {
         //更新处理
         schoolStudentService.editStu(student);
         return ResultUtils.success("密码修改成功");
+    }
+
+    @GetMapping("/getStuNumBySex")
+    public ResultVo getStuNumBySex() throws IOException {
+        StuNumBySexVo vo = new StuNumBySexVo();
+        List<Integer> total = schoolStudentService.getTotal();
+        vo.setMan(total.get(0));
+        vo.setWoman(total.get(1));
+        return ResultUtils.success("ok",vo);
+    }
+    @GetMapping("/getStuNumByClass")
+    public ResultVo getStuNumByClass() throws IOException {
+        List<StuNumByClassDto> stuList = schoolStudentService.getClassStuNum();
+        List<StuNumByClassVo> volist = new ArrayList<StuNumByClassVo>();
+        Iterator<StuNumByClassDto> i = stuList.iterator();
+        while(i.hasNext()){
+            StuNumByClassDto s = i.next();
+            StuNumByClassVo vo = new StuNumByClassVo();
+            vo.setName(s.getClassName());
+            vo.setValue(s.getNum());
+            volist.add(vo);
+        }
+        return ResultUtils.success("ok",volist);
     }
 }

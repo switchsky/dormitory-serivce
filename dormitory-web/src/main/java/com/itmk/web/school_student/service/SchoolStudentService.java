@@ -3,8 +3,10 @@ package com.itmk.web.school_student.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itmk.web.school_student.entity.SchoolStudent;
+import com.itmk.web.school_student.entity.StuNumByClassDto;
 import com.itmk.web.school_student.entity.StuParm;
 
+import java.util.List;
 
 
 /**
@@ -22,4 +24,8 @@ public interface SchoolStudentService extends IService<SchoolStudent> {
     void deleteStu(Long studId);
     //查询学生信息
     SchoolStudent getById(Long studId);
+
+    List<Integer> getTotal();
+
+    List<StuNumByClassDto> getClassStuNum();
 }
