@@ -85,7 +85,7 @@ public class SysNoticeController {
     @GetMapping("/getTopList")
     public ResultVo getTopList(){
         QueryWrapper<SysNotice> query = new QueryWrapper<>();
-        query.lambda().orderByDesc(SysNotice::getCreateTime).last("limit 3");
+        query.lambda().orderByDesc(SysNotice::getCreateTime).last("limit 10");
         List<SysNotice> list = sysNoticeService.list(query);
         return ResultUtils.success("查询成功",list);
     }

@@ -3,6 +3,8 @@ package com.itmk.web.select_bed.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
+import com.itmk.web.apply_change.entity.ApplyChange;
+import com.itmk.web.apply_change.service.ApplyChangeService;
 import com.itmk.web.assign_bed.entity.SelectBed;
 import com.itmk.web.school_student.entity.SchoolStudent;
 import com.itmk.web.school_student.service.SchoolStudentService;
@@ -11,6 +13,7 @@ import com.itmk.web.select_bed.entity.StuBed;
 import com.itmk.web.select_bed.entity.StuBedVo;
 import com.itmk.web.select_bed.service.StuBedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,10 +30,12 @@ public class StuBedController {
     private StuBedService stuBedService;
     @Autowired
     private SchoolStudentService schoolStudentService;
-
+    @Autowired
+    private ApplyChangeService applyChangeService;
+    @Transactional
     @PostMapping("/selectBedSave")
     public ResultVo selectBedSave(@RequestBody StuBed stuBed){
-        //根据床位查询，是否被选选
+        //根据床位查询，是否已经被选择
         QueryWrapper<StuBed> query = new QueryWrapper<>();
         query.lambda().eq(StuBed::getBedId,stuBed.getBedId());
         StuBed bed = stuBedService.getOne(query);
@@ -42,14 +47,24 @@ public class StuBedController {
         stuQuery.lambda().eq(StuBed::getStuId,stuBed.getStuId());
         StuBed stu = stuBedService.getOne(stuQuery);
         if(stu != null){
-            return ResultUtils.error("您已经选择宿舍，不用重复选择!");
+            //调换床位操作
+            //查询该学生是否已经申请
+            QueryWrapper<ApplyChange> appquery = new QueryWrapper<>();
+            appquery.lambda().eq(ApplyChange::getApplyUserId, stuBed.getStuId()).eq(ApplyChange::getStatus, "0");
+            ApplyChange one = applyChangeService.getOne(appquery);
+            if (one != null) {
+                return ResultUtils.error("您已经提交申请，不重复提交!");
+            }
+            //没有重复提交得情况下
+            return ResultUtils.success("申请成功!");
+        } else {
+            //保存选择的宿舍
+            boolean save = stuBedService.save(stuBed);
+            if(save){
+                return ResultUtils.success("选择成功!");
+            }
+            return ResultUtils.error("选择失败!");
         }
-        //保存选择的宿舍
-        boolean save = stuBedService.save(stuBed);
-        if(save){
-            return ResultUtils.success("选择成功!");
-        }
-        return ResultUtils.error("选择失败!");
     }
 
     //查询学生宿舍
