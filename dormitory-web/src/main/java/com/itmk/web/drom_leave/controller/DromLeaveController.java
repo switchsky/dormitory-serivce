@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
 import com.itmk.web.drom_leave.entity.DromLeave;
+import com.itmk.web.drom_leave.entity.LeaveNumVo;
 import com.itmk.web.drom_leave.entity.LeaveParm;
 import com.itmk.web.drom_leave.service.DromLeaveService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Author thf
@@ -70,5 +73,12 @@ public class DromLeaveController {
         }
         IPage<DromLeave> list = dromLeaveService.page(page, query);
         return ResultUtils.success("查询成功",list);
+    }
+
+    @GetMapping("/getLeaveNum")
+    public ResultVo getLeaveNum(){
+        List<LeaveNumVo> leaveNum = dromLeaveService.getLeaveNum();
+        System.err.println(leaveNum);
+        return ResultUtils.success("ok",leaveNum);
     }
 }
