@@ -47,16 +47,18 @@ public class StuBedController {
         stuQuery.lambda().eq(StuBed::getStuId,stuBed.getStuId());
         StuBed stu = stuBedService.getOne(stuQuery);
         if(stu != null){
-            //调换床位操作
-            //查询该学生是否已经申请
-            QueryWrapper<ApplyChange> appquery = new QueryWrapper<>();
-            appquery.lambda().eq(ApplyChange::getApplyUserId, stuBed.getStuId()).eq(ApplyChange::getStatus, "0");
-            ApplyChange one = applyChangeService.getOne(appquery);
-            if (one != null) {
-                return ResultUtils.error("您已经提交申请，不重复提交!");
+            //先删后加
+            QueryWrapper<StuBed> delquery = new QueryWrapper<>();
+            System.out.println(stu.getBedId());
+            delquery.lambda().eq(StuBed::getStuId,stu.getStuId())
+                .eq(StuBed::getBedId,stu.getBedId());
+            boolean remove = stuBedService.remove(delquery);
+            if(remove){
+                //保存选择的宿舍
+                boolean save = stuBedService.save(stuBed);
+                if(save) return ResultUtils.success("调换成功!");
             }
-            //没有重复提交得情况下
-            return ResultUtils.success("申请成功!");
+            return ResultUtils.error("调换失败!");
         } else {
             //保存选择的宿舍
             boolean save = stuBedService.save(stuBed);
