@@ -7,6 +7,7 @@ import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
 import com.itmk.utils.SensitiveFilterUtil;
 import com.itmk.web.sys_notice.entity.NoticeParm;
+import com.itmk.web.sys_notice.entity.SensitiveWords;
 import com.itmk.web.sys_notice.entity.SysNotice;
 import com.itmk.web.sys_notice.service.SysNoticeService;
 import org.apache.commons.lang.StringUtils;
@@ -29,13 +30,16 @@ public class SysNoticeController {
     @PostMapping
     public ResultVo add(@RequestBody SysNotice sysNotice){
         sysNotice.setCreateTime(new Date());
+        SensitiveWords sensitiveVo = new SensitiveWords();
         //过滤敏感词
         String noticeTitle = sysNotice.getNoticeTitle();
         String noticeText = sysNotice.getNoticeText();
         //初始化容器
         SensitiveFilterUtil.initContext();
         Boolean haveSensitiveWords = SensitiveFilterUtil.contains(noticeTitle)||SensitiveFilterUtil.contains(noticeText);
-        if(haveSensitiveWords) return ResultUtils.error("含有敏感词汇，请重新编辑");
+        sensitiveVo.setTitle(SensitiveFilterUtil.getSensitiveWord(noticeTitle));
+        sensitiveVo.setPassage(SensitiveFilterUtil.getSensitiveWord(noticeText));
+        if(haveSensitiveWords) return ResultUtils.success("sensitive",sensitiveVo);
         boolean save = sysNoticeService.save(sysNotice);
         if(save){
             return ResultUtils.success("新增成功");

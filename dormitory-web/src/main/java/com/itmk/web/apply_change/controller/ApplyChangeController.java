@@ -34,6 +34,7 @@ public class ApplyChangeController {
         if (one != null) {
             return ResultUtils.error("您已经提交申请，不重复提交!");
         }
+        if (parm.getApplyId()==parm.getChangeId()) return ResultUtils.error("您不能和自己调换床位!");
         applyChangeService.applySave(parm);
         return ResultUtils.success("申请成功!");
     }
