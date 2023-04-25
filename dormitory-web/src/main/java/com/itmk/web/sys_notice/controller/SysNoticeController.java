@@ -3,9 +3,9 @@ package com.itmk.web.sys_notice.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.itmk.config.sensitive.SensitiveUtil;
 import com.itmk.utils.ResultUtils;
 import com.itmk.utils.ResultVo;
-import com.itmk.utils.SensitiveFilterUtil;
 import com.itmk.web.sys_notice.entity.NoticeParm;
 import com.itmk.web.sys_notice.entity.SensitiveWords;
 import com.itmk.web.sys_notice.entity.SysNotice;
@@ -26,6 +26,8 @@ import java.util.List;
 public class SysNoticeController {
     @Autowired
     private SysNoticeService sysNoticeService;
+    @Autowired
+    private SensitiveUtil sensitiveUtil;
     //新增
     @PostMapping
     public ResultVo add(@RequestBody SysNotice sysNotice){
@@ -34,11 +36,9 @@ public class SysNoticeController {
         //过滤敏感词
         String noticeTitle = sysNotice.getNoticeTitle();
         String noticeText = sysNotice.getNoticeText();
-        //初始化容器
-        SensitiveFilterUtil.initContext();
-        Boolean haveSensitiveWords = SensitiveFilterUtil.contains(noticeTitle)||SensitiveFilterUtil.contains(noticeText);
-        sensitiveVo.setTitle(SensitiveFilterUtil.getSensitiveWord(noticeTitle));
-        sensitiveVo.setPassage(SensitiveFilterUtil.getSensitiveWord(noticeText));
+        Boolean haveSensitiveWords = sensitiveUtil.contains(noticeTitle)||sensitiveUtil.contains(noticeText);
+        sensitiveVo.setTitle(sensitiveUtil.getSensitiveWord(noticeTitle));
+        sensitiveVo.setPassage(sensitiveUtil.getSensitiveWord(noticeText));
         if(haveSensitiveWords) return ResultUtils.success("sensitive",sensitiveVo);
         boolean save = sysNoticeService.save(sysNotice);
         if(save){
@@ -51,9 +51,7 @@ public class SysNoticeController {
     public ResultVo edit(@RequestBody SysNotice sysNotice){
         String noticeTitle = sysNotice.getNoticeTitle();
         String noticeText = sysNotice.getNoticeText();
-        //初始化容器
-        SensitiveFilterUtil.initContext();
-        Boolean haveSensitiveWords = SensitiveFilterUtil.contains(noticeTitle)||SensitiveFilterUtil.contains(noticeText);
+        Boolean haveSensitiveWords = sensitiveUtil.contains(noticeTitle)||sensitiveUtil.contains(noticeText);
         if(haveSensitiveWords) return ResultUtils.error("含有敏感词汇，请重新编辑");
         boolean save = sysNoticeService.updateById(sysNotice);
         if(save){

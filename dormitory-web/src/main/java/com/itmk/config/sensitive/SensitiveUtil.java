@@ -1,38 +1,21 @@
-package com.itmk.utils;
-
-
-/**
- * 敏感词过滤工具类
- * @author thf
- *
- */
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+package com.itmk.config.sensitive;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public class SensitiveFilterUtil {
+import java.io.FileInputStream;
+import java.util.*;
 
-
-    /**
+public class SensitiveUtil {
+     /**
      * 敏感词集合
      */
-    public static HashMap sensitiveWordMap;
+    public HashMap sensitiveWordMap;
 
     /**
      * 初始化敏感词库,构建DFA算法模型
      */
-    public static void initContext() {
+    public void initContext() {
         HashSet<String> set = new HashSet<String>();
         try {
             //获取敏感词文件
@@ -66,7 +49,7 @@ public class SensitiveFilterUtil {
      *
      * @param sensitiveWordSet 敏感词库
      */
-    private static void initSensitiveWordMap(Set<String> sensitiveWordSet) {
+    private void initSensitiveWordMap(Set<String> sensitiveWordSet) {
         //初始化敏感词容器,减少扩容操作
         sensitiveWordMap = new HashMap<String,String>(sensitiveWordSet.size());
         Map<Object,Object> temp;
@@ -96,14 +79,16 @@ public class SensitiveFilterUtil {
         }
     }
 
-    /**
+
+
+     /**
      * 判断文字是否包含敏感字符
      *
      * 文本
      *
      *  若包含返回true,否则返回false
      */
-    public static boolean contains(String txt) {
+    public boolean contains(String txt) {
         boolean flag = false;
         for (int i = 0; i < txt.length(); i++) {
             int matchFlag = checkSensitiveWord(txt, i); //判断是否包含敏感字符
@@ -121,7 +106,7 @@ public class SensitiveFilterUtil {
      * @param beginIndex
      * @return 如果存在,则返回敏感词字符的长度,不存在返回0
      */
-    private static int checkSensitiveWord(String txt, int beginIndex) {
+    private int checkSensitiveWord(String txt, int beginIndex) {
         //敏感词结束标识位:用于敏感词只有1位的情况
         boolean flag = false;
         //匹配标识数默认为0
@@ -157,7 +142,7 @@ public class SensitiveFilterUtil {
      *
      *
      */
-    public static List getSensitiveWord(String txt) {
+    public List getSensitiveWord(String txt) {
         List sensitiveWordList = new ArrayList();
         for (int i = 0; i < txt.length(); i++) {
             //判断是否包含敏感字符
@@ -176,8 +161,7 @@ public class SensitiveFilterUtil {
      * @param context
      * @return
      */
-    public static List checkTxt(String context) {
-        initContext();
+    public List checkTxt(String context) {
         //包含敏感词返回所有敏感词数据
         return getSensitiveWord(context);
     }
