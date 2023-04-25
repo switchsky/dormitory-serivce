@@ -49,10 +49,13 @@ public class SysNoticeController {
     //编辑
     @PutMapping
     public ResultVo edit(@RequestBody SysNotice sysNotice){
+        SensitiveWords sensitiveVo = new SensitiveWords();
         String noticeTitle = sysNotice.getNoticeTitle();
         String noticeText = sysNotice.getNoticeText();
         Boolean haveSensitiveWords = sensitiveUtil.contains(noticeTitle)||sensitiveUtil.contains(noticeText);
-        if(haveSensitiveWords) return ResultUtils.error("含有敏感词汇，请重新编辑");
+        sensitiveVo.setTitle(sensitiveUtil.getSensitiveWord(noticeTitle));
+        sensitiveVo.setPassage(sensitiveUtil.getSensitiveWord(noticeText));
+        if(haveSensitiveWords) return ResultUtils.success("sensitive",sensitiveVo);
         boolean save = sysNoticeService.updateById(sysNotice);
         if(save){
             return ResultUtils.success("编辑成功");
