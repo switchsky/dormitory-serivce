@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.itmk.web.school_major.mapper.SchoolMajorMapper">
-    <select id="getList" resultType="com.itmk.web.school_major.entity.SchoolMajor">
+    <select id="getList" resultType="com.switchsky.web.school_major.entity.SchoolMajor">
         select sm.*,sc.collage_name from school_major as sm
         left join school_collage as sc
         on sm.collage_id = sc.collage_id

@@ -5,7 +5,7 @@
 <mapper namespace="com.itmk.web.drom_leave.mapper.DromLeaveMapper">
 
 
-    <select id="getLeaveNum" resultType="com.itmk.web.drom_leave.entity.LeaveNumVo">
+    <select id="getLeaveNum" resultType="com.switchsky.web.drom_leave.entity.LeaveNumVo">
         SELECT 10-(DATEDIFF(NOW(),leave_time)) as time,count(*) as num FROM drom_leave GROUP BY leave_time
           having DATEDIFF(leave_time,NOW())&lt;0 AND DATEDIFF(leave_time,NOW())>=-10
     </select>

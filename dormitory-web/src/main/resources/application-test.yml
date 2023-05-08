@@ -31,9 +31,9 @@ mybatis-plus:
 #jwt配置
 jwt:
   #颁发者
-  issuer: itmk
+  issuer: switchsky
   #秘钥
-  secret: com.itmk
+  secret: com.switchsky
   #30分钟过期
   expiration: 30
 

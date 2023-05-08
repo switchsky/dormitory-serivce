@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.itmk.web.assign_bed.mapper.AssignBedMapper">
-    <select id="getRoomVoList" resultType="com.itmk.web.assign_bed.entity.RoomVo">
+    <select id="getRoomVoList" resultType="com.switchsky.web.assign_bed.entity.RoomVo">
         select dr.room_id,dr.room_code,dr.root_type from (
         select drb.room_id from assign_bed as ab
         left join drom_room_bed as drb on drb.bed_id = ab.bed_id
@@ -11,12 +11,12 @@
         GROUP BY drb.room_id)t
         left join dorm_room as dr on dr.room_id = t.room_id
     </select>
-    <select id="getBedVoList" resultType="com.itmk.web.assign_bed.entity.BedVo">
+    <select id="getBedVoList" resultType="com.switchsky.web.assign_bed.entity.BedVo">
         select drb.bed_id,drb.bed_code from assign_bed as ab
         left join drom_room_bed as drb on drb.bed_id = ab.bed_id
         where drb.room_id =#{roomId}
     </select>
-    <select id="getRoomByClassId" resultType="com.itmk.web.assign_bed.entity.SelectRoom">
+    <select id="getRoomByClassId" resultType="com.switchsky.web.assign_bed.entity.SelectRoom">
         select dr.room_id,dr.room_code,dr.root_type,ab.class_id from school_class as sc
         inner join assign_bed as ab on ab.class_id = sc.class_id
         inner join drom_room_bed as drb on drb.bed_id = ab.bed_id
@@ -24,7 +24,7 @@
         where sc.class_id =#{classId}
         GROUP BY dr.room_id,dr.room_code,dr.root_type,ab.class_id
     </select>
-    <select id="getBedByClassId" resultType="com.itmk.web.assign_bed.entity.SelectBed">
+    <select id="getBedByClassId" resultType="com.switchsky.web.assign_bed.entity.SelectBed">
         select t.*,st.stu_name,sch.class_name from (
             select dr.room_id,drb.bed_id,drb.bed_code,dr.root_type,ab.class_id from school_class as sc
             inner join assign_bed as ab on ab.class_id = sc.class_id
