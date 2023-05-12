@@ -22,4 +22,15 @@ public class userTest {
         sysUser.setIsAdmin("1");
         sysUserService.add(sysUser);
     }
+    @Test
+    public void testAddUserUnnormal() {
+        SysUser sysUser = new SysUser();
+//        sysUser.setRoleId(1L);
+        sysUser.setUsername("zlj");
+        sysUser.setPassword("1111111111111111111111111111111111111111111111");
+        sysUser.setPhone("1234567890");
+        sysUser.setSex("0");
+        sysUser.setIsAdmin("1");
+        sysUserService.add(sysUser);
+    }
 }

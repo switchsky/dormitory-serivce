@@ -63,6 +63,7 @@ public class SysNoticeController {
         return ResultUtils.error("编辑失败!");
     }
 
+
     //删除
     @DeleteMapping("/{noticeId}")
     public ResultVo delete(@PathVariable("noticeId") Long noticeId){

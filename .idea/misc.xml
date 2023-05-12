@@ -11,4 +11,10 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
+  <component name="yapi">
+    <option name="projectToken">9fab39bd864f93f5605704842648a8ae51b7fbee1b3978c3238437631609bf4d</option>
+    <option name="projectId">24165</option>
+    <option name="yapiUrl">https://yapi.pro/</option>
+    <option name="projectType">api</option>
+  </component>
 </project>
