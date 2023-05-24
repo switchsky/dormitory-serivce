@@ -2,7 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.itmk.web.select_bed.mapper.StuBedMapper">
+<mapper namespace="com.switchsky.web.select_bed.mapper.StuBedMapper">
     <select id="getStuBedList" resultType="com.switchsky.web.select_bed.entity.StuBedVo">
         select sb.stu_id,sb.bed_id,dr.room_id,dr.room_code,dr.root_type,drb.bed_code,ds.storey_name,db.build_name,ss.stu_name,scs.class_name from select_bed as sb
         inner join drom_room_bed as drb on drb.bed_id = sb.bed_id

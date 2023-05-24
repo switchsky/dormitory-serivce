@@ -2,7 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.itmk.web.drom_room_bed.mapper.DromRoomBedMapper">
+<mapper namespace="com.switchsky.web.drom_room_bed.mapper.DromRoomBedMapper">
     <select id="getBedList" resultType="com.switchsky.web.drom_room_bed.entity.DromRoomBed">
         select * from (
         select a.* from drom_room_bed  as a
