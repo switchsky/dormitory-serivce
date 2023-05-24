@@ -2,7 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.itmk.web.assign_bed.mapper.AssignBedMapper">
+<mapper namespace="com.switchsky.web.assign_bed.mapper.AssignBedMapper">
     <select id="getRoomVoList" resultType="com.switchsky.web.assign_bed.entity.RoomVo">
         select dr.room_id,dr.room_code,dr.root_type from (
         select drb.room_id from assign_bed as ab

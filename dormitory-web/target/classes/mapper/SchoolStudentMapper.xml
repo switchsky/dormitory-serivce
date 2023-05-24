@@ -2,7 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.itmk.web.school_student.mapper.SchoolStudentMapper">
+<mapper namespace="com.switchsky.web.school_student.mapper.SchoolStudentMapper">
     <select id="getStuById" resultType="com.switchsky.web.school_student.entity.SchoolStudent">
         select st.*,sm.major_id,scc.collage_id,sr.role_id from school_student as st
         left join school_class as sc on st.class_id = sc.class_id
